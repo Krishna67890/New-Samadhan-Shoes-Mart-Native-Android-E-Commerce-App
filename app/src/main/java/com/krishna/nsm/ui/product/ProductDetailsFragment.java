@@ -193,31 +193,38 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     private void buyNow() {
+        if (!isAdded() || product == null) return;
         if (selectedSize.isEmpty()) {
             Toast.makeText(getContext(), "Please select a size", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Add to cart first
-        com.krishna.nsm.CartManager.getInstance(requireContext())
-                .addToCart(product, 1, selectedSize);
+        if (getContext() != null) {
+            com.krishna.nsm.CartManager.getInstance(getContext())
+                    .addToCart(product, 1, selectedSize);
+        }
 
-        // Navigate to checkout
-        androidx.navigation.Navigation.findNavController(requireView()).navigate(R.id.nav_checkout);
+        if (getView() != null) {
+            androidx.navigation.Navigation.findNavController(getView()).navigate(R.id.nav_checkout);
+        }
     }
 
     private void addToCart() {
+        if (!isAdded() || product == null) return;
         if (selectedSize.isEmpty()) {
             Toast.makeText(getContext(), "Please select a size", Toast.LENGTH_SHORT).show();
             return;
         }
         
-        // Show Interstitial Ad before adding to cart
-        AdManager.getInstance().showInterstitial(requireActivity());
+        if (getActivity() != null) {
+            AdManager.getInstance().showInterstitial(getActivity());
+        }
 
-        com.krishna.nsm.CartManager.getInstance(requireContext())
-                .addToCart(product, 1, selectedSize);
-        Toast.makeText(getContext(), "Added to cart (Size: " + selectedSize + ")", Toast.LENGTH_SHORT).show();
+        if (getContext() != null) {
+            com.krishna.nsm.CartManager.getInstance(getContext())
+                    .addToCart(product, 1, selectedSize);
+            Toast.makeText(getContext(), "Added to cart (Size: " + selectedSize + ")", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void extractColorFromImage() {

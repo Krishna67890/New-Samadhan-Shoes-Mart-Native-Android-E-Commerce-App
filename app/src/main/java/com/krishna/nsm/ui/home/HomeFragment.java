@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && binding.homeScrollView != null) {
             binding.homeScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                if (binding == null) return;
+                if (binding == null || !isAdded() || getContext() == null) return;
 
                 View animatedView = binding.cardAnimatedShoe;
                 if (animatedView == null) return;
