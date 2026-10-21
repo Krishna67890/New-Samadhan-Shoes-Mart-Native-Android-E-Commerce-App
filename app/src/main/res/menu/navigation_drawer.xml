@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_collections"
+            android:icon="@drawable/ic_menu_collections"
+            android:title="@string/menu_collections" />
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_categories_24"
+            android:title="@string/menu_categories" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_gallery_black_24dp"
+            android:title="@string/menu_gallery" />
+        <item
+            android:id="@+id/nav_workshop"
+            android:icon="@drawable/ic_heritage_workshop"
+            android:title="@string/menu_workshop" />
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/ic_cart_24"
+            android:title="@string/menu_cart" />
+        <item
+            android:id="@+id/nav_wishlist"
+            android:icon="@drawable/ic_wishlist_24"
+            android:title="@string/menu_wishlist" />
+        <item
+            android:id="@+id/nav_orders"
+            android:icon="@drawable/ic_orders_24"
+            android:title="@string/menu_orders" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_slideshow_black_24dp"
+            android:title="@string/menu_about" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/menu_settings" />
+        <item
+            android:id="@+id/nav_owner_login"
+            android:icon="@android:drawable/ic_lock_lock"
+            android:title="Owner Login" />
+    </group>
+</menu>

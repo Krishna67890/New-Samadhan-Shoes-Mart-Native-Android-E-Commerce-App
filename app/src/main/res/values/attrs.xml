@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="gray_light" format="color" />
+    <attr name="gray_text" format="color" />
+    <attr name="nsmDivider" format="color" />
+</resources>

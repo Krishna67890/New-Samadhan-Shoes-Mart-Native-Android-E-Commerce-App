@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Colors -->
+    <color name="primary">#90CAF9</color>
+    <color name="primary_variant">#1A237E</color>
+    <color name="secondary">#FFD600</color>
+    <color name="secondary_variant">#FFD600</color>
+    <color name="background">#121212</color>
+    <color name="surface">#1E1E1E</color>
+    <color name="error">#CF6679</color>
+    <color name="onPrimary">#000000</color>
+    <color name="onSecondary">#000000</color>
+    <color name="onBackground">#FFFFFF</color>
+    <color name="onSurface">#FFFFFF</color>
+    <color name="onError">#000000</color>
+
+    <!-- UI Accent Colors for Dark Mode -->
+    <color name="whatsapp_green">#25D366</color>
+    <color name="gray_light">#2C2C2C</color>
+    <color name="gray_text">#BDBDBD</color>
+    <color name="pink_discount">#F48FB1</color>
+    <color name="divider">#323232</color>
+    <color name="card_background">#1E1E1E</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#BDBDBD</color>
+</resources>

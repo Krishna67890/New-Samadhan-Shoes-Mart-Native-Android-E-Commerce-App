@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.krishna.nsm.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_collections"
+        android:name="com.krishna.nsm.ui.collections.CollectionsFragment"
+        android:label="@string/menu_collections"
+        tools:layout="@layout/fragment_collections" />
+
+    <fragment
+        android:id="@+id/nav_categories"
+        android:name="com.krishna.nsm.ui.categories.CategoriesFragment"
+        android:label="@string/menu_categories"
+        tools:layout="@layout/fragment_categories" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.krishna.nsm.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="com.krishna.nsm.ui.cart.CartFragment"
+        android:label="@string/menu_cart"
+        tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/nav_wishlist"
+        android:name="com.krishna.nsm.ui.wishlist.WishlistFragment"
+        android:label="@string/menu_wishlist"
+        tools:layout="@layout/fragment_wishlist" />
+
+    <fragment
+        android:id="@+id/nav_orders"
+        android:name="com.krishna.nsm.ui.orders.OrdersFragment"
+        android:label="@string/menu_orders"
+        tools:layout="@layout/fragment_orders" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.krishna.nsm.ui.about.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.krishna.nsm.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/nav_workshop"
+        android:name="com.krishna.nsm.ui.workshop.WorkshopFragment"
+        android:label="@string/menu_workshop"
+        tools:layout="@layout/fragment_workshop" />
+
+    <fragment
+        android:id="@+id/nav_owner_login"
+        android:name="com.krishna.nsm.ui.owner.OwnerLoginFragment"
+        android:label="Owner Login"
+        tools:layout="@layout/fragment_owner_login">
+        <action
+            android:id="@+id/action_nav_owner_login_to_nav_admin_dashboard"
+            app:destination="@id/nav_admin_dashboard" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_admin_dashboard"
+        android:name="com.krishna.nsm.ui.admin.AdminDashboardFragment"
+        android:label="Admin Dashboard"
+        tools:layout="@layout/fragment_admin_dashboard">
+        <action
+            android:id="@+id/action_nav_admin_dashboard_to_nav_admin_product_list"
+            app:destination="@id/nav_admin_product_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_admin_product_list"
+        android:name="com.krishna.nsm.ui.admin.AdminProductListFragment"
+        android:label="Manage Products"
+        tools:layout="@layout/fragment_admin_product_list" />
+
+    <fragment
+        android:id="@+id/nav_product_details"
+        android:name="com.krishna.nsm.ui.product.ProductDetailsFragment"
+        android:label="Product Details"
+        tools:layout="@layout/fragment_product_details">
+        <argument
+            android:name="productId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_checkout"
+        android:name="com.krishna.nsm.ui.checkout.CheckoutFragment"
+        android:label="Checkout"
+        tools:layout="@layout/fragment_checkout" />
+</navigation>
