@@ -6,136 +6,164 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="12dp"
     android:layout_marginVertical="6dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
     app:strokeColor="#EEEEEE"
     app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="12dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardBackgroundColor="#F8F8F8"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp">
-
-            <ImageView
-                android:id="@+id/cart_item_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_launcher_background" />
-        </com.google.android.material.card.MaterialCardView>
-
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/cart_item_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="Product Name"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                app:cardBackgroundColor="#F8F8F8"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
-            <TextView
-                android:id="@+id/cart_item_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Size: 8"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:textColor="#757575" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                <ImageView
+                    android:id="@+id/cart_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_launcher_background" />
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/cart_item_price"
-                    android:layout_width="0dp"
+                    android:id="@+id/cart_item_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="₹1,499"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:textColor="?attr/colorPrimary"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Product Name"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/cart_item_size"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_white_circle"
-                    android:backgroundTint="#F0F0F0"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="2dp">
+                    android:layout_marginTop="2dp"
+                    android:text="Size: 8"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textColor="#757575" />
 
-                    <ImageButton
-                        android:id="@+id/btn_minus"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:padding="6dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_remove_24"
-                        app:tint="@color/black" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/cart_item_quantity"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/cart_item_price"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:minWidth="20dp"
-                        android:text="1"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:text="₹1,499"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        android:textColor="?attr/colorPrimary"
                         android:textStyle="bold" />
 
-                    <ImageButton
-                        android:id="@+id/btn_plus"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:padding="6dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_add_24"
-                        app:tint="@color/black" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_white_circle"
+                        android:backgroundTint="#F0F0F0"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
 
+                        <ImageButton
+                            android:id="@+id/btn_minus"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="6dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_remove_24"
+                            app:tint="@color/black" />
+
+                        <TextView
+                            android:id="@+id/cart_item_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
+                            android:minWidth="20dp"
+                            android:text="1"
+                            android:textAlignment="center"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <ImageButton
+                            android:id="@+id/btn_plus"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="6dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_add_24"
+                            app:tint="@color/black" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btn_remove"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_delete_24"
+                app:tint="#D32F2F" />
+
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btn_remove"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="top"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="6dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_delete_24"
-            app:tint="#D32F2F" />
+        <!-- Quick Single Item Purchase Option -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="end">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_buy_this"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:paddingHorizontal="12dp"
+                android:text="Buy Only This ⚡"
+                android:textColor="@color/whatsapp_green"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:icon="@android:drawable/stat_notify_chat"
+                app:iconTint="@color/whatsapp_green" />
+        </LinearLayout>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

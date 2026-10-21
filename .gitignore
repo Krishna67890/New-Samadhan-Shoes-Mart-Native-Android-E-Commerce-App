@@ -27,6 +27,14 @@ gradle-app.setting
 # Local configuration file (sdk path, etc)
 local.properties
 
+# Environment & Secret files
+.env
+*.env
+*.jks
+*.keystore
+*-keystore
+secrets.properties
+
 # Log Files
 *.log
 

@@ -127,6 +127,9 @@ public class AboutFragment extends Fragment {
         }
 
         // Developer & Website Actions
+        if (binding.btnShopWebsite != null) {
+            binding.btnShopWebsite.setOnClickListener(v -> openUrl("https://new-samadhan-shoes-mart.vercel.app/"));
+        }
         if (binding.btnVisitWebsite != null) {
             binding.btnVisitWebsite.setOnClickListener(v -> openUrl(getString(R.string.url_shop_website)));
         }

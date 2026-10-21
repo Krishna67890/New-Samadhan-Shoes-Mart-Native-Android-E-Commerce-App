@@ -20,12 +20,13 @@ import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
-    private List<CartItem> cartItems;
+    private final List<CartItem> cartItems;
     private final OnCartItemChangeListener listener;
 
     public interface OnCartItemChangeListener {
         void onQuantityChanged(int position, int newQuantity);
         void onRemoveItem(int position);
+        void onCheckoutItem(int position);
     }
 
     public CartAdapter(List<CartItem> cartItems, OnCartItemChangeListener listener) {
@@ -34,9 +35,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public void updateItems(List<CartItem> newItems) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new CartDiffCallback(this.cartItems, newItems));
+        List<CartItem> safeNew = newItems != null ? newItems : new ArrayList<>();
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new CartDiffCallback(this.cartItems, safeNew));
         this.cartItems.clear();
-        this.cartItems.addAll(newItems);
+        this.cartItems.addAll(safeNew);
         diffResult.dispatchUpdatesTo(this);
     }
 
@@ -63,6 +65,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
             CartItem oldItem = oldList.get(oldItemPosition);
             CartItem newItem = newList.get(newItemPosition);
+            if (oldItem == null || newItem == null || oldItem.getProduct() == null || newItem.getProduct() == null) return false;
             return oldItem.getProduct().getId().equals(newItem.getProduct().getId()) &&
                     oldItem.getSelectedSize().equals(newItem.getSelectedSize());
         }
@@ -71,6 +74,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
             CartItem oldItem = oldList.get(oldItemPosition);
             CartItem newItem = newList.get(newItemPosition);
+            if (oldItem == null || newItem == null) return false;
             return oldItem.getQuantity() == newItem.getQuantity() &&
                     oldItem.getTotalPrice() == newItem.getTotalPrice();
         }
@@ -85,8 +89,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
+        if (position < 0 || position >= cartItems.size()) return;
         CartItem item = cartItems.get(position);
-        holder.bind(item, position, listener);
+        if (item != null) {
+            holder.bind(item, position, listener);
+        }
     }
 
     @Override
@@ -98,6 +105,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         ImageView itemImage;
         TextView itemName, itemSize, itemPrice, itemQuantity;
         ImageButton btnPlus, btnMinus, btnRemove;
+        View btnBuyThis;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,9 +117,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             btnPlus = itemView.findViewById(R.id.btn_plus);
             btnMinus = itemView.findViewById(R.id.btn_minus);
             btnRemove = itemView.findViewById(R.id.btn_remove);
+            btnBuyThis = itemView.findViewById(R.id.btn_buy_this);
         }
 
         public void bind(CartItem item, int position, OnCartItemChangeListener listener) {
+            if (item == null || item.getProduct() == null) return;
+
             itemName.setText(item.getProduct().getName());
             itemSize.setText("Size: " + item.getSelectedSize());
             itemPrice.setText("₹" + item.getTotalPrice());
@@ -121,19 +132,32 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 try {
                     InputStream is = itemView.getContext().getAssets().open(item.getProduct().getImages().get(0));
                     Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    itemImage.setImageBitmap(bitmap);
+                    if (bitmap != null) {
+                        itemImage.setImageBitmap(bitmap);
+                    }
+                    is.close();
                 } catch (IOException e) {
                     itemImage.setImageResource(R.drawable.ic_launcher_background);
                 }
             }
 
-            btnPlus.setOnClickListener(v -> listener.onQuantityChanged(position, item.getQuantity() + 1));
+            btnPlus.setOnClickListener(v -> {
+                if (listener != null) listener.onQuantityChanged(position, item.getQuantity() + 1);
+            });
             btnMinus.setOnClickListener(v -> {
-                if (item.getQuantity() > 1) {
+                if (listener != null && item.getQuantity() > 1) {
                     listener.onQuantityChanged(position, item.getQuantity() - 1);
                 }
             });
-            btnRemove.setOnClickListener(v -> listener.onRemoveItem(position));
+            btnRemove.setOnClickListener(v -> {
+                if (listener != null) listener.onRemoveItem(position);
+            });
+
+            if (btnBuyThis != null) {
+                btnBuyThis.setOnClickListener(v -> {
+                    if (listener != null) listener.onCheckoutItem(position);
+                });
+            }
         }
     }
 }

@@ -30,10 +30,11 @@ public class CartManager {
     }
 
     public void addToCart(Product product, int quantity, String size) {
+        if (product == null || product.getId() == null) return;
         List<CartItem> items = getCartItems();
         boolean exists = false;
         for (CartItem item : items) {
-            if (item.getProduct().getId().equals(product.getId()) && item.getSelectedSize().equals(size)) {
+            if (item != null && item.getProduct() != null && product.getId().equals(item.getProduct().getId()) && size.equals(item.getSelectedSize())) {
                 item.setQuantity(item.getQuantity() + quantity);
                 exists = true;
                 break;
@@ -46,12 +47,17 @@ public class CartManager {
     }
 
     public List<CartItem> getCartItems() {
-        String json = sharedPreferences.getString(KEY_CART, null);
-        if (json == null) {
+        try {
+            String json = sharedPreferences.getString(KEY_CART, null);
+            if (json == null) {
+                return new ArrayList<>();
+            }
+            Type type = new TypeToken<List<CartItem>>() {}.getType();
+            List<CartItem> items = gson.fromJson(json, type);
+            return items != null ? items : new ArrayList<>();
+        } catch (Throwable t) {
             return new ArrayList<>();
         }
-        Type type = new TypeToken<List<CartItem>>() {}.getType();
-        return gson.fromJson(json, type);
     }
 
     public void removeFromCart(int index) {
@@ -68,7 +74,10 @@ public class CartManager {
             if (quantity <= 0) {
                 items.remove(index);
             } else {
-                items.get(index).setQuantity(quantity);
+                CartItem item = items.get(index);
+                if (item != null) {
+                    item.setQuantity(quantity);
+                }
             }
             saveCartItems(items);
         }
@@ -81,13 +90,19 @@ public class CartManager {
     public double getCartTotal() {
         double total = 0;
         for (CartItem item : getCartItems()) {
-            total += item.getTotalPrice();
+            if (item != null) {
+                total += item.getTotalPrice();
+            }
         }
         return total;
     }
 
     private void saveCartItems(List<CartItem> items) {
-        String json = gson.toJson(items);
-        sharedPreferences.edit().putString(KEY_CART, json).apply();
+        try {
+            String json = gson.toJson(items != null ? items : new ArrayList<>());
+            sharedPreferences.edit().putString(KEY_CART, json).apply();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 }

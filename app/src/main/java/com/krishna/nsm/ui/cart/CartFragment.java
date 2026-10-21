@@ -17,6 +17,7 @@ import com.krishna.nsm.R;
 import com.krishna.nsm.adapter.CartAdapter;
 import com.krishna.nsm.databinding.FragmentCartBinding;
 import com.krishna.nsm.model.CartItem;
+import com.krishna.nsm.ads.AdManager;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -38,7 +39,6 @@ public class CartFragment extends Fragment {
         updateUI();
         applyBranding();
 
-        // Animations
         binding.toolbar.setAlpha(0f);
         binding.toolbar.setTranslationY(-20f);
         binding.toolbar.animate().alpha(1f).translationY(0f).setDuration(600).start();
@@ -46,7 +46,7 @@ public class CartFragment extends Fragment {
         binding.btnCheckout.setOnClickListener(v -> {
             if (cartManager.getCartItems().isEmpty()) {
                 Toast.makeText(getContext(), "Cart is empty", Toast.LENGTH_SHORT).show();
-            } else {
+            } else if (isAdded()) {
                 Navigation.findNavController(root).navigate(R.id.nav_checkout);
             }
         });
@@ -54,13 +54,20 @@ public class CartFragment extends Fragment {
         binding.btnWhatsappCart.setOnClickListener(v -> sendCartToWhatsApp());
 
         binding.btnShopNow.setOnClickListener(v -> {
-            Navigation.findNavController(root).navigate(R.id.nav_home);
+            if (isAdded()) {
+                Navigation.findNavController(root).navigate(R.id.nav_home);
+            }
         });
+
+        if (binding.cartAdContainer != null && getActivity() != null) {
+            AdManager.getInstance().loadBanner(getActivity(), binding.cartAdContainer);
+        }
 
         return root;
     }
 
     private void applyBranding() {
+        if (binding == null) return;
         if (themeManager.isRgbBrandingEnabled()) {
             int brandColor = themeManager.getBrandColor();
             android.content.res.ColorStateList colorStateList = android.content.res.ColorStateList.valueOf(brandColor);
@@ -73,6 +80,7 @@ public class CartFragment extends Fragment {
     }
 
     private void setupCartList() {
+        if (binding == null) return;
         List<CartItem> items = cartManager.getCartItems();
         adapter = new CartAdapter(items, new CartAdapter.OnCartItemChangeListener() {
             @Override
@@ -86,9 +94,41 @@ public class CartFragment extends Fragment {
                 cartManager.removeFromCart(position);
                 refreshCart();
             }
+
+            @Override
+            public void onCheckoutItem(int position) {
+                List<CartItem> currentItems = cartManager.getCartItems();
+                if (position >= 0 && position < currentItems.size()) {
+                    CartItem item = currentItems.get(position);
+                    if (item != null && item.getProduct() != null && isAdded()) {
+                        sendSingleItemToWhatsApp(item);
+                    }
+                }
+            }
         });
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.cartRecycler.setAdapter(adapter);
+    }
+
+    private void sendSingleItemToWhatsApp(CartItem item) {
+        if (item == null || item.getProduct() == null) return;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("*New Samadhan Shoes - Direct Order*\n\n");
+        sb.append("Item: ").append(item.getProduct().getName()).append("\n");
+        sb.append("Size: ").append(item.getSelectedSize()).append("\n");
+        sb.append("Quantity: ").append(item.getQuantity()).append("\n");
+        sb.append("Total Price: ₹").append(item.getTotalPrice()).append("\n\n");
+        sb.append("Please confirm availability and dispatch for this item.");
+
+        try {
+            String url = "https://api.whatsapp.com/send?phone=" + Constants.WHATSAPP_NUMBER +
+                    "&text=" + URLEncoder.encode(sb.toString(), "UTF-8");
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void refreshCart() {
@@ -101,6 +141,7 @@ public class CartFragment extends Fragment {
     }
 
     private void updateUI() {
+        if (binding == null) return;
         double total = cartManager.getCartTotal();
         binding.cartTotalPrice.setText("₹" + total);
         if (cartManager.getCartItems().isEmpty()) {
@@ -123,10 +164,12 @@ public class CartFragment extends Fragment {
         sb.append("I would like to order the following items from my cart:\n\n");
 
         for (CartItem item : items) {
-            sb.append("- ").append(item.getProduct().getName())
-                    .append(" (Size: ").append(item.getSelectedSize()).append(")")
-                    .append(" x ").append(item.getQuantity())
-                    .append(" = ₹").append(item.getTotalPrice()).append("\n");
+            if (item != null && item.getProduct() != null) {
+                sb.append("- ").append(item.getProduct().getName())
+                        .append(" (Size: ").append(item.getSelectedSize()).append(")")
+                        .append(" x ").append(item.getQuantity())
+                        .append(" = ₹").append(item.getTotalPrice()).append("\n");
+            }
         }
 
         sb.append("\nTotal Amount: ₹").append(cartManager.getCartTotal());
@@ -135,8 +178,7 @@ public class CartFragment extends Fragment {
         try {
             String url = "https://api.whatsapp.com/send?phone=" + Constants.WHATSAPP_NUMBER +
                     "&text=" + URLEncoder.encode(sb.toString(), "UTF-8");
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(getContext(), "WhatsApp not installed", Toast.LENGTH_SHORT).show();

@@ -130,6 +130,16 @@
                         app:icon="@android:drawable/stat_sys_phone_call"
                         app:cornerRadius="12dp" />
                 </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_shop_website"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Visit Official Store Website"
+                    app:icon="@android:drawable/ic_menu_compass"
+                    app:cornerRadius="12dp" />
             </LinearLayout>
 
             <View

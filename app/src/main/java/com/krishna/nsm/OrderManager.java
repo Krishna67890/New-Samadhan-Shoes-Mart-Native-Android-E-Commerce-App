@@ -29,22 +29,36 @@ public class OrderManager {
     }
 
     public void addOrder(Order order) {
+        if (order == null) return;
         List<Order> orders = getOrders();
-        orders.add(0, order); // Add to the top
+        orders.add(0, order);
         saveOrders(orders);
     }
 
     public List<Order> getOrders() {
-        String json = sharedPreferences.getString(KEY_ORDERS, null);
-        if (json == null) {
+        try {
+            String json = sharedPreferences.getString(KEY_ORDERS, null);
+            if (json == null) {
+                return new ArrayList<>();
+            }
+            Type type = new TypeToken<List<Order>>() {}.getType();
+            List<Order> orders = gson.fromJson(json, type);
+            return orders != null ? orders : new ArrayList<>();
+        } catch (Throwable t) {
             return new ArrayList<>();
         }
-        Type type = new TypeToken<List<Order>>() {}.getType();
-        return gson.fromJson(json, type);
+    }
+
+    public void clearOrders() {
+        saveOrders(new ArrayList<>());
     }
 
     private void saveOrders(List<Order> orders) {
-        String json = gson.toJson(orders);
-        sharedPreferences.edit().putString(KEY_ORDERS, json).apply();
+        try {
+            String json = gson.toJson(orders != null ? orders : new ArrayList<>());
+            sharedPreferences.edit().putString(KEY_ORDERS, json).apply();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 }
