@@ -137,6 +137,14 @@ public class MainActivity extends AppCompatActivity {
                     navController
             );
 
+            navigationView.setNavigationItemSelectedListener(item -> {
+                boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+                if (handled && binding.drawerLayout != null) {
+                    binding.drawerLayout.closeDrawers();
+                }
+                return handled;
+            });
+
             if (navigationView.getHeaderCount() > 0) {
                 View headerView = navigationView.getHeaderView(0);
                 if (headerView != null) {
