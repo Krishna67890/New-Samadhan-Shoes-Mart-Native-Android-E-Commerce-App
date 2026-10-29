@@ -156,6 +156,27 @@ public class MainActivity extends AppCompatActivity {
             );
         }
 
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (navController != null) {
+                    try {
+                        if (navController.getCurrentDestination() != null && navController.getCurrentDestination().getId() == R.id.nav_home) {
+                            finish();
+                        } else if (!navController.navigateUp()) {
+                            setEnabled(false);
+                            onBackPressed();
+                            setEnabled(true);
+                        }
+                    } catch (Throwable t) {
+                        finish();
+                    }
+                } else {
+                    finish();
+                }
+            }
+        });
+
         requestPermissions();
         scheduleNotifications();
         initAds();
@@ -371,13 +392,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        if (navController != null && appBarConfiguration != null) {
-            return NavigationUI.navigateUp(
-                    navController,
-                    appBarConfiguration
-            ) || super.onSupportNavigateUp();
+        if (navController != null) {
+            try {
+                return navController.navigateUp() || super.onSupportNavigateUp();
+            } catch (Throwable t) {
+                return super.onSupportNavigateUp();
+            }
         }
-
         return super.onSupportNavigateUp();
     }
 }
