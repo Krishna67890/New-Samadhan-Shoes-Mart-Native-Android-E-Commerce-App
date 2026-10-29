@@ -150,6 +150,14 @@ public class ProductRepository {
 
         try {
             List<Product> loaded = gson.fromJson(json, listType);
+            if (loaded != null) {
+                List<String> defaultSizes = java.util.Arrays.asList("5", "6", "7", "8", "9", "10", "11", "12");
+                for (Product p : loaded) {
+                    if (p != null) {
+                        p.setSizes(defaultSizes);
+                    }
+                }
+            }
             return loaded != null ? loaded : new ArrayList<>();
         } catch (Throwable t) {
             t.printStackTrace();
