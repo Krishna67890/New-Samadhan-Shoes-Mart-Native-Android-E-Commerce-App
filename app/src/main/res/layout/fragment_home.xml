@@ -149,6 +149,25 @@
                     android:contentDescription="Happy Diwali 2026 Promotional Banner" />
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Official Diwali Dip Feature Banner -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                app:strokeWidth="0dp">
+
+                <ImageView
+                    android:id="@+id/iv_diwali_dip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="Diwali Special Dip Banner" />
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Banner Section (ViewPager2 Advertisement Slider) -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"

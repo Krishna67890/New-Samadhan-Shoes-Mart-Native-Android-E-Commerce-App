@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
     private void setupUIWithProducts(List<Product> allProducts, View root) {
         if (binding == null) return;
 
-        // Load Official Diwali 2026 Banner
+        // Load Official Diwali 2026 Banner & Diwali Dip Banner
         if (binding.ivDiwaliBanner != null) {
             try (InputStream is = requireContext().getAssets().open("NSM-DIWALI_BANNER.png")) {
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
@@ -71,6 +71,17 @@ public class HomeFragment extends Fragment {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+
+        if (binding.ivDiwaliDip != null) {
+            try (InputStream is = requireContext().getAssets().open("Diwali-Dip.jpg")) {
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                if (bitmap != null) {
+                    binding.ivDiwaliDip.setImageBitmap(bitmap);
+                }
+            } catch (Throwable t) {
+                t.printStackTrace();
             }
         }
 
@@ -273,7 +284,6 @@ public class HomeFragment extends Fragment {
         List<String> bannerPaths = new ArrayList<>();
         bannerPaths.add("NSM-DIWALI_BANNER.png");
         bannerPaths.add("NSM-Diwali-Offer.jpg");
-        bannerPaths.add("Diwali-Dip.jpg");
         for (int i = 6; i <= 38; i++) {
             String fileName = String.format(java.util.Locale.US, "IMG-20260928-WA%04d.jpg", i);
             bannerPaths.add(fileName);
