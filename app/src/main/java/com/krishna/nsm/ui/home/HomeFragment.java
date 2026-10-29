@@ -285,6 +285,15 @@ public class HomeFragment extends Fragment {
             }
         });
         binding.bannerViewPager.setAdapter(bannerAdapter);
+        binding.bannerViewPager.setOffscreenPageLimit(3);
+        binding.bannerViewPager.setPageTransformer((page, position) -> {
+            float absPos = Math.abs(position);
+            page.setTranslationX(-position * page.getWidth() * 0.15f);
+            float scale = 0.82f + (1f - absPos) * 0.18f;
+            page.setScaleX(scale);
+            page.setScaleY(scale);
+            page.setAlpha(0.4f + (1f - absPos) * 0.6f);
+        });
 
         if (binding.bannerIndicator != null) {
             binding.bannerIndicator.setVisibility(View.GONE);

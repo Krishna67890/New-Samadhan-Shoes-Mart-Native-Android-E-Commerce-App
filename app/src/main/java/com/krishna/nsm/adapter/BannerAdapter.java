@@ -34,7 +34,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         this.listener = listener;
 
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = Math.max(1024, maxMemory / 8);
+        final int cacheSize = Math.max(1024, maxMemory / 4);
         this.memoryCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
@@ -64,7 +64,11 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
             executorService.execute(() -> {
                 try (InputStream is = holder.itemView.getContext().getAssets().open(assetPath)) {
                     BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 2; // Memory optimization: 4x reduction in RAM
+                    if (assetPath.contains("Diwali") || assetPath.contains("DIWALI")) {
+                        options.inSampleSize = 1; // Full HD quality for all Diwali banners & offers
+                    } else {
+                        options.inSampleSize = 2;
+                    }
                     
                     Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
                     if (bitmap != null) {
