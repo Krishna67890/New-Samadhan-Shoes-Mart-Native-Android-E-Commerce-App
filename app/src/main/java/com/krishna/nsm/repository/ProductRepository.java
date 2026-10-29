@@ -150,14 +150,20 @@ public class ProductRepository {
 
         try {
             List<Product> loaded = gson.fromJson(json, listType);
+            List<Product> filtered = new ArrayList<>();
             if (loaded != null) {
                 List<String> defaultSizes = java.util.Arrays.asList("5", "6", "7", "8", "9", "10", "11", "12");
                 int imgIndex = 6;
                 for (Product p : loaded) {
                     if (p != null) {
+                        String name = p.getName() != null ? p.getName().toLowerCase(java.util.Locale.ROOT) : "";
+                        String desc = p.getDescription() != null ? p.getDescription().toLowerCase(java.util.Locale.ROOT) : "";
+                        if (name.contains("mochi") || desc.contains("mochi")) {
+                            continue; // Remove Mochi sandals/products
+                        }
+
                         p.setSizes(defaultSizes);
                         
-                        // Ensure 4 consecutive photos of the exact same shoe model & color
                         List<String> consistentImages = new ArrayList<>();
                         for (int k = 0; k < 4; k++) {
                             int fileNum = 6 + ((imgIndex + k - 6) % 180);
@@ -165,10 +171,11 @@ public class ProductRepository {
                         }
                         p.setImages(consistentImages);
                         imgIndex += 4;
+                        filtered.add(p);
                     }
                 }
             }
-            return loaded != null ? loaded : new ArrayList<>();
+            return filtered;
         } catch (Throwable t) {
             t.printStackTrace();
             return new ArrayList<>();
