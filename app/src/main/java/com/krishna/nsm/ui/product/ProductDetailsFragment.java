@@ -178,17 +178,24 @@ public class ProductDetailsFragment extends Fragment {
             ).attach();
         }
 
-        if (product.getSizes() != null) {
-            binding.sizeChipGroup.removeAllViews();
-            for (String size : product.getSizes()) {
-                Chip chip = new Chip(requireContext());
-                chip.setText(size);
-                chip.setCheckable(true);
-                chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (isChecked) selectedSize = size;
-                });
-                binding.sizeChipGroup.addView(chip);
-            }
+        List<String> sizes = product.getSizes();
+        if (sizes == null || sizes.isEmpty()) {
+            sizes = java.util.Arrays.asList("5", "6", "7", "8", "9", "10", "11", "12");
+        }
+        binding.sizeChipGroup.removeAllViews();
+        for (String size : sizes) {
+            Chip chip = new Chip(requireContext());
+            chip.setText(size);
+            chip.setCheckable(true);
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    selectedSize = size;
+                    double updatedPrice = Product.getPriceForSize(size);
+                    product.setPrice(updatedPrice);
+                    binding.detailPrice.setText("₹" + String.format("%,.0f", updatedPrice));
+                }
+            });
+            binding.sizeChipGroup.addView(chip);
         }
     }
 

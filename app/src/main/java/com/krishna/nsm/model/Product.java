@@ -24,6 +24,16 @@ public class Product implements Serializable {
 
     public Product() {}
 
+    public static double getPriceForSize(String sizeStr) {
+        if (sizeStr == null) return 1299.0;
+        try {
+            int size = Integer.parseInt(sizeStr.trim());
+            if (size >= 5 && size <= 10) return 1299.0;
+            if (size == 11 || size == 12) return 1450.0;
+        } catch (Exception ignored) {}
+        return 1299.0;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

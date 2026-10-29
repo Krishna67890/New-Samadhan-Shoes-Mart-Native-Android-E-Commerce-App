@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -18,6 +20,8 @@ import com.krishna.nsm.databinding.FragmentHomeBinding;
 import com.krishna.nsm.model.Product;
 import com.krishna.nsm.repository.ProductRepository;
 import com.krishna.nsm.ads.AdManager;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,6 +62,18 @@ public class HomeFragment extends Fragment {
 
     private void setupUIWithProducts(List<Product> allProducts, View root) {
         if (binding == null) return;
+
+        // Load Official Diwali 2026 Banner
+        if (binding.ivDiwaliBanner != null) {
+            try (InputStream is = requireContext().getAssets().open("NSM-DIWALI_BANNER.png")) {
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                if (bitmap != null) {
+                    binding.ivDiwaliBanner.setImageBitmap(bitmap);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         setupBanners();
 
