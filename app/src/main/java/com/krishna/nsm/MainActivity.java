@@ -124,6 +124,15 @@ public class MainActivity extends AppCompatActivity {
                     navController,
                     appBarConfiguration
             );
+
+            if (binding.drawerLayout != null && binding.appBarMain != null && binding.appBarMain.toolbar != null) {
+                androidx.appcompat.app.ActionBarDrawerToggle toggle = new androidx.appcompat.app.ActionBarDrawerToggle(
+                        this, binding.drawerLayout, binding.appBarMain.toolbar,
+                        R.string.navigation_drawer_open, R.string.navigation_drawer_close
+                );
+                binding.drawerLayout.addDrawerListener(toggle);
+                toggle.syncState();
+            }
         }
 
         if (getSupportActionBar() != null) {
