@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.krishna.nsm"
-        minSdk = 32
+        minSdk = 25
         targetSdk = 36
 
         versionCode = 4
