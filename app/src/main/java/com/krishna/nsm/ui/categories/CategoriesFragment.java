@@ -44,7 +44,7 @@ public class CategoriesFragment extends Fragment {
         } else {
             String initialCategory = getArguments() != null ? getArguments().getString("category") : "All";
             int tabIndex = categories.indexOf(initialCategory);
-            if (tabIndex != -1) {
+            if (tabIndex != -1 && binding.categoryTabs.getTabAt(tabIndex) != null) {
                 binding.categoryTabs.getTabAt(tabIndex).select();
             }
             loadCategoryProducts(initialCategory);
@@ -54,6 +54,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void setupTabs() {
+        if (binding == null) return;
         for (String category : categories) {
             binding.categoryTabs.addTab(binding.categoryTabs.newTab().setText(category));
         }
@@ -61,7 +62,9 @@ public class CategoriesFragment extends Fragment {
         binding.categoryTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                loadCategoryProducts(tab.getText().toString());
+                if (tab != null && tab.getText() != null) {
+                    loadCategoryProducts(tab.getText().toString());
+                }
             }
 
             @Override
@@ -73,6 +76,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void setupSorting() {
+        if (binding == null) return;
         binding.sortButton.setOnClickListener(v -> {
             String[] options = {
                     getString(R.string.sort_price_low_high),
@@ -98,7 +102,7 @@ public class CategoriesFragment extends Fragment {
             case 1: // High to Low
                 java.util.Collections.sort(currentProducts, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
                 break;
-            case 2: // Newest (Assume based on list order or isNew)
+            case 2: // Newest
                 java.util.Collections.sort(currentProducts, (p1, p2) -> Boolean.compare(p2.isNew(), p1.isNew()));
                 break;
         }
@@ -106,6 +110,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void loadSearchResults(String query) {
+        if (binding == null) return;
         currentProducts = repository.searchProducts(query);
         binding.categoryTabs.setVisibility(View.GONE);
         binding.resultsCountText.setVisibility(View.VISIBLE);
@@ -114,6 +119,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void loadCategoryProducts(String category) {
+        if (binding == null) return;
         if ("All".equalsIgnoreCase(category)) {
             currentProducts = repository.getAllProducts();
         } else {
@@ -125,6 +131,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void applyBranding() {
+        if (binding == null) return;
         if (themeManager.isRgbBrandingEnabled()) {
             int brandColor = themeManager.getBrandColor();
             binding.categoryTabs.setSelectedTabIndicatorColor(brandColor);
@@ -132,40 +139,35 @@ public class CategoriesFragment extends Fragment {
                 androidx.core.content.ContextCompat.getColor(requireContext(), R.color.gray_text),
                 brandColor
             );
-            // binding.sortButton.setIconTint(android.content.res.ColorStateList.valueOf(brandColor));
-            // binding.sortButton.setTextColor(brandColor);
         }
     }
 
     private void displayProducts(List<Product> products) {
-        if (adapter == null) {
-            int spanCount = getResources().getInteger(R.integer.product_grid_span);
-            binding.categoryProductsRecycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+        if (binding == null || getContext() == null || !isAdded()) return;
+        int spanCount = getResources().getInteger(R.integer.product_grid_span);
+        binding.categoryProductsRecycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
 
-            // Add layout animation
-            android.view.animation.LayoutAnimationController controller =
-                    android.view.animation.AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
-            binding.categoryProductsRecycler.setLayoutAnimation(controller);
-
-            adapter = new ProductAdapter(products, requireContext(), new ProductAdapter.OnProductClickListener() {
-                @Override
-                public void onProductClick(Product product) {
+        adapter = new ProductAdapter(products, requireContext(), new ProductAdapter.OnProductClickListener() {
+            @Override
+            public void onProductClick(Product product) {
+                if (isAdded() && product != null) {
                     Bundle bundle = new Bundle();
                     bundle.putString("productId", product.getId());
                     Navigation.findNavController(requireView()).navigate(R.id.nav_product_details, bundle);
                 }
+            }
 
-                @Override
-                public void onWatchlistClick(Product product) {
+            @Override
+            public void onWatchlistClick(Product product) {
+                if (product != null) {
                     repository.toggleWatchlist(product.getId());
-                    adapter.updateProducts(currentProducts);
+                    if (adapter != null && currentProducts != null) {
+                        adapter.updateProducts(currentProducts);
+                    }
                 }
-            });
-            binding.categoryProductsRecycler.setAdapter(adapter);
-        } else {
-            adapter.updateProducts(products);
-            binding.categoryProductsRecycler.scheduleLayoutAnimation();
-        }
+            }
+        });
+        binding.categoryProductsRecycler.setAdapter(adapter);
     }
 
     @Override

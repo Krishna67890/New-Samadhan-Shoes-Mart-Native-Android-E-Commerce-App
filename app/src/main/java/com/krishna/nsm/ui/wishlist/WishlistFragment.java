@@ -27,53 +27,60 @@ public class WishlistFragment extends Fragment {
         View root = binding.getRoot();
 
         viewModel = new ViewModelProvider(this).get(WishlistViewModel.class);
-        
-        int spanCount = getResources().getInteger(R.integer.product_grid_span);
-        binding.wishlistRecycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
 
-        binding.btnExploreWishlist.setOnClickListener(v -> 
-            Navigation.findNavController(v).navigate(R.id.nav_home));
+        binding.btnExploreWishlist.setOnClickListener(v -> {
+            if (isAdded()) {
+                Navigation.findNavController(v).navigate(R.id.nav_home);
+            }
+        });
 
         viewModel.getWatchlistProducts().observe(getViewLifecycleOwner(), this::updateUi);
 
-        // Entry animation for title
-        binding.toolbar.setAlpha(0f);
-        binding.toolbar.setTranslationY(-20f);
-        binding.wishlistSubtitle.setAlpha(0f);
-        binding.wishlistSubtitle.setTranslationY(-20f);
-
-        binding.toolbar.animate().alpha(1f).translationY(0f).setDuration(600).start();
-        binding.wishlistSubtitle.animate().alpha(1f).translationY(0f).setDuration(600).setStartDelay(100).start();
+        if (binding.toolbar != null) {
+            binding.toolbar.setAlpha(0f);
+            binding.toolbar.setTranslationY(-20f);
+            binding.toolbar.animate().alpha(1f).translationY(0f).setDuration(600).start();
+        }
+        if (binding.wishlistSubtitle != null) {
+            binding.wishlistSubtitle.setAlpha(0f);
+            binding.wishlistSubtitle.setTranslationY(-20f);
+            binding.wishlistSubtitle.animate().alpha(1f).translationY(0f).setDuration(600).setStartDelay(100).start();
+        }
 
         return root;
     }
 
     private void updateUi(List<Product> items) {
-        if (items.isEmpty()) {
+        if (binding == null || !isAdded() || getContext() == null) return;
+
+        if (items == null || items.isEmpty()) {
             binding.emptyWishlistContainer.setVisibility(View.VISIBLE);
             binding.wishlistRecycler.setVisibility(View.GONE);
         } else {
             binding.emptyWishlistContainer.setVisibility(View.GONE);
             binding.wishlistRecycler.setVisibility(View.VISIBLE);
             
-            if (adapter == null) {
-                adapter = new ProductAdapter(items, requireContext(), new ProductAdapter.OnProductClickListener() {
-                    @Override
-                    public void onProductClick(Product product) {
+            int spanCount = getResources().getInteger(R.integer.product_grid_span);
+            binding.wishlistRecycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+
+            adapter = new ProductAdapter(items, requireContext(), new ProductAdapter.OnProductClickListener() {
+                @Override
+                public void onProductClick(Product product) {
+                    if (isAdded() && product != null) {
                         Bundle bundle = new Bundle();
                         bundle.putString("productId", product.getId());
                         Navigation.findNavController(requireView()).navigate(R.id.nav_product_details, bundle);
                     }
+                }
 
-                    @Override
-                    public void onWatchlistClick(Product product) {
+                @Override
+                public void onWatchlistClick(Product product) {
+                    if (product != null) {
                         viewModel.toggleWatchlist(product.getId());
                     }
-                });
-                binding.wishlistRecycler.setAdapter(adapter);
-            } else {
-                adapter.updateProducts(items);
-            }
+                }
+            });
+            binding.wishlistRecycler.setAdapter(adapter);
         }
     }
 
