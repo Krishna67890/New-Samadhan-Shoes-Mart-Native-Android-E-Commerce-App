@@ -158,8 +158,13 @@ public class ProductRepository {
                     if (p != null) {
                         String name = p.getName() != null ? p.getName().toLowerCase(java.util.Locale.ROOT) : "";
                         String desc = p.getDescription() != null ? p.getDescription().toLowerCase(java.util.Locale.ROOT) : "";
-                        if (name.contains("mochi") || desc.contains("mochi")) {
-                            continue; // Remove Mochi sandals/products
+                        String cat = p.getCategory() != null ? p.getCategory().toLowerCase(java.util.Locale.ROOT) : "";
+                        
+                        if (name.contains("mochi") || desc.contains("mochi") || cat.contains("mochi") ||
+                            name.contains("sandal") || desc.contains("sandal") || cat.contains("sandal") ||
+                            name.contains("slipper") || desc.contains("slipper") || cat.contains("slipper") ||
+                            name.contains("slide") || desc.contains("slide") || cat.contains("slide")) {
+                            continue; // Skip slippers, sandals, slides, and mochi
                         }
 
                         p.setSizes(defaultSizes);
