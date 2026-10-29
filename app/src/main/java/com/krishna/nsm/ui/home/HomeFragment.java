@@ -14,7 +14,6 @@ import com.google.android.material.chip.Chip;
 import com.krishna.nsm.R;
 import com.krishna.nsm.ThemeManager;
 import com.krishna.nsm.adapter.BannerAdapter;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.krishna.nsm.adapter.ProductAdapter;
 import com.krishna.nsm.databinding.FragmentHomeBinding;
 import com.krishna.nsm.model.Product;
@@ -272,6 +271,9 @@ public class HomeFragment extends Fragment {
     private void setupBanners() {
         if (binding == null || binding.bannerViewPager == null) return;
         List<String> bannerPaths = new ArrayList<>();
+        bannerPaths.add("NSM-DIWALI_BANNER.png");
+        bannerPaths.add("NSM-Diwali-Offer.jpg");
+        bannerPaths.add("Diwali-Dip.jpg");
         for (int i = 6; i <= 38; i++) {
             String fileName = String.format(java.util.Locale.US, "IMG-20260928-WA%04d.jpg", i);
             bannerPaths.add(fileName);
@@ -285,8 +287,7 @@ public class HomeFragment extends Fragment {
         binding.bannerViewPager.setAdapter(bannerAdapter);
 
         if (binding.bannerIndicator != null) {
-            new TabLayoutMediator(binding.bannerIndicator, binding.bannerViewPager,
-                    (tab, position) -> {}).attach();
+            binding.bannerIndicator.setVisibility(View.GONE);
         }
 
         bannerRunnable = new Runnable() {
