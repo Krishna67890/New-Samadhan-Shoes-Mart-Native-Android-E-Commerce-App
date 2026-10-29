@@ -49,16 +49,23 @@ public class ProductDetailsFragment extends Fragment {
         themeManager = new ThemeManager(requireContext());
 
         String productId = getArguments() != null ? getArguments().getString("productId") : null;
+        ProductRepository repository = new ProductRepository(requireContext());
         if (productId != null) {
-            ProductRepository repository = new ProductRepository(requireContext());
             product = repository.getProductById(productId);
-            if (product != null) {
-                displayProductDetails();
-                repository.isInWatchlist(productId).observe(getViewLifecycleOwner(), this::updateWishlistButtonState);
-                
-                if (themeManager.isRgbBrandingEnabled()) {
-                    extractColorFromImage();
-                }
+        }
+        if (product == null) {
+            List<Product> all = repository.getAllProducts();
+            if (all != null && !all.isEmpty()) {
+                product = all.get(0);
+            }
+        }
+
+        if (product != null) {
+            displayProductDetails();
+            repository.isInWatchlist(product.getId()).observe(getViewLifecycleOwner(), this::updateWishlistButtonState);
+            
+            if (themeManager.isRgbBrandingEnabled()) {
+                extractColorFromImage();
             }
         }
 
