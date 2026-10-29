@@ -152,9 +152,19 @@ public class ProductRepository {
             List<Product> loaded = gson.fromJson(json, listType);
             if (loaded != null) {
                 List<String> defaultSizes = java.util.Arrays.asList("5", "6", "7", "8", "9", "10", "11", "12");
+                int imgIndex = 6;
                 for (Product p : loaded) {
                     if (p != null) {
                         p.setSizes(defaultSizes);
+                        
+                        // Ensure 4 consecutive photos of the exact same shoe model & color
+                        List<String> consistentImages = new ArrayList<>();
+                        for (int k = 0; k < 4; k++) {
+                            int fileNum = 6 + ((imgIndex + k - 6) % 180);
+                            consistentImages.add(String.format(java.util.Locale.US, "IMG-20260928-WA%04d.jpg", fileNum));
+                        }
+                        p.setImages(consistentImages);
+                        imgIndex += 4;
                     }
                 }
             }
