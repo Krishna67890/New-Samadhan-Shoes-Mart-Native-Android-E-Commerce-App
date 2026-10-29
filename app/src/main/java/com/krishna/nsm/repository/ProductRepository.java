@@ -153,7 +153,7 @@ public class ProductRepository {
             List<Product> filtered = new ArrayList<>();
             if (loaded != null) {
                 List<String> defaultSizes = java.util.Arrays.asList("5", "6", "7", "8", "9", "10", "11", "12");
-                int imgIndex = 6;
+                int productCounter = 0;
                 for (Product p : loaded) {
                     if (p != null) {
                         String name = p.getName() != null ? p.getName().toLowerCase(java.util.Locale.ROOT) : "";
@@ -169,13 +169,16 @@ public class ProductRepository {
 
                         p.setSizes(defaultSizes);
                         
+                        // Assign exactly 4 matching photos of the exact same shoe model & color
+                        int baseFileNum = 6 + ((productCounter * 4) % 170);
                         List<String> consistentImages = new ArrayList<>();
                         for (int k = 0; k < 4; k++) {
-                            int fileNum = 6 + ((imgIndex + k - 6) % 180);
+                            int fileNum = baseFileNum + k;
                             consistentImages.add(String.format(java.util.Locale.US, "IMG-20260928-WA%04d.jpg", fileNum));
                         }
                         p.setImages(consistentImages);
-                        imgIndex += 4;
+                        
+                        productCounter++;
                         filtered.add(p);
                     }
                 }
