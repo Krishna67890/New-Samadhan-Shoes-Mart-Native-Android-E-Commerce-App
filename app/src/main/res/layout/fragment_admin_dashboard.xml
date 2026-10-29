@@ -1,37 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Admin Dashboard"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"/>
-
-    <Button
-        android:id="@+id/btn_manage_products"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Manage Products"
-        android:layout_marginBottom="8dp"/>
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <Button
-        android:id="@+id/btn_view_orders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Orders"
-        android:layout_marginBottom="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owner Control Panel"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:layout_marginBottom="24dp"/>
 
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:backgroundTint="@color/design_default_color_error"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_manage_products"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Manage Products, Photos &amp; Prices"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            app:cornerRadius="16dp" />
 
-</LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_manage_banners"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Home Banners &amp; Layout Manager"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            app:cornerRadius="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_store_orders"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Store Orders &amp; Customer Analytics"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
+            app:cornerRadius="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_app_version_info"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="App Version &amp; Software Updates"
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp"
+            app:cornerRadius="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Secure Owner Logout"
+            android:textSize="16sp"
+            android:backgroundTint="#D32F2F"
+            app:cornerRadius="16dp" />
+
+    </LinearLayout>
+</ScrollView>
