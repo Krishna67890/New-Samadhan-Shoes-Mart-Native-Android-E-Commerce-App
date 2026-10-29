@@ -171,72 +171,84 @@ public class AdManager {
     public void loadBanner(Activity activity, FrameLayout container) {
         if (activity == null || activity.isFinishing() || activity.isDestroyed() || container == null) return;
 
-        try {
-            destroyBanner();
+        activity.runOnUiThread(() -> {
+            try {
+                destroyBanner(activity);
 
-            adView = new AdView(activity);
-            container.addView(adView);
+                adView = new AdView(activity);
+                container.addView(adView);
 
-            int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
-            float density = activity.getResources().getDisplayMetrics().density;
-            int adWidth = (int) (widthPixels / density);
-            if (adWidth <= 0) adWidth = 320;
+                int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+                float density = activity.getResources().getDisplayMetrics().density;
+                int adWidth = (int) (widthPixels / density);
+                if (adWidth <= 0) adWidth = 320;
 
-            AdSize adSize = AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, adWidth);
-            BannerAdRequest adRequest = new BannerAdRequest.Builder(PROD_BANNER_AD_UNIT_ID, adSize).build();
+                AdSize adSize = AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, adWidth);
+                BannerAdRequest adRequest = new BannerAdRequest.Builder(PROD_BANNER_AD_UNIT_ID, adSize).build();
 
-            adView.loadAd(adRequest, new AdLoadCallback<BannerAd>() {
-                @Override
-                public void onAdLoaded(@NonNull BannerAd bannerAd) {
-                    Log.d(TAG, "Banner ad loaded");
-                    container.setVisibility(View.VISIBLE);
-                }
+                adView.loadAd(adRequest, new AdLoadCallback<BannerAd>() {
+                    @Override
+                    public void onAdLoaded(@NonNull BannerAd bannerAd) {
+                        activity.runOnUiThread(() -> {
+                            Log.d(TAG, "Banner ad loaded");
+                            container.setVisibility(View.VISIBLE);
+                        });
+                    }
 
-                @Override
-                public void onAdFailedToLoad(@NonNull LoadAdError adError) {
-                    Log.e(TAG, "Prod banner ad failed to load: " + adError.getMessage() + ". Trying test banner...");
-                    loadTestBanner(activity, container);
-                }
-            });
-        } catch (Throwable t) {
-            Log.e(TAG, "Error loading banner, loading fallback", t);
-            loadFallbackBannerView(activity, container);
-        }
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+                        activity.runOnUiThread(() -> {
+                            Log.e(TAG, "Prod banner ad failed to load: " + adError.getMessage() + ". Trying test banner...");
+                            loadTestBanner(activity, container);
+                        });
+                    }
+                });
+            } catch (Throwable t) {
+                Log.e(TAG, "Error loading banner, loading fallback", t);
+                loadFallbackBannerView(activity, container);
+            }
+        });
     }
 
     private void loadTestBanner(Activity activity, FrameLayout container) {
         if (activity == null || activity.isFinishing() || activity.isDestroyed() || container == null) return;
 
-        try {
-            destroyBanner();
+        activity.runOnUiThread(() -> {
+            try {
+                destroyBanner(activity);
 
-            adView = new AdView(activity);
-            container.addView(adView);
+                adView = new AdView(activity);
+                container.addView(adView);
 
-            int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
-            float density = activity.getResources().getDisplayMetrics().density;
-            int adWidth = (int) (widthPixels / density);
-            if (adWidth <= 0) adWidth = 320;
+                int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+                float density = activity.getResources().getDisplayMetrics().density;
+                int adWidth = (int) (widthPixels / density);
+                if (adWidth <= 0) adWidth = 320;
 
-            AdSize adSize = AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, adWidth);
-            BannerAdRequest adRequest = new BannerAdRequest.Builder(TEST_BANNER_AD_UNIT_ID, adSize).build();
+                AdSize adSize = AdSize.getLargeAnchoredAdaptiveBannerAdSize(activity, adWidth);
+                BannerAdRequest adRequest = new BannerAdRequest.Builder(TEST_BANNER_AD_UNIT_ID, adSize).build();
 
-            adView.loadAd(adRequest, new AdLoadCallback<BannerAd>() {
-                @Override
-                public void onAdLoaded(@NonNull BannerAd bannerAd) {
-                    Log.d(TAG, "Test Banner ad loaded");
-                    container.setVisibility(View.VISIBLE);
-                }
+                adView.loadAd(adRequest, new AdLoadCallback<BannerAd>() {
+                    @Override
+                    public void onAdLoaded(@NonNull BannerAd bannerAd) {
+                        activity.runOnUiThread(() -> {
+                            Log.d(TAG, "Test Banner ad loaded");
+                            container.setVisibility(View.VISIBLE);
+                        });
+                    }
 
-                @Override
-                public void onAdFailedToLoad(@NonNull LoadAdError adError) {
-                    Log.e(TAG, "Test banner ad failed to load: " + adError.getMessage() + ". Loading fallback view...");
-                    loadFallbackBannerView(activity, container);
-                }
-            });
-        } catch (Throwable t) {
-            loadFallbackBannerView(activity, container);
-        }
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
+                        activity.runOnUiThread(() -> {
+                            Log.e(TAG, "Test banner ad failed to load: " + adError.getMessage() + ". Loading fallback view...");
+                            loadFallbackBannerView(activity, container);
+                        });
+                    }
+                });
+            } catch (Throwable t) {
+                loadFallbackBannerView(activity, container);
+            }
+        });
     }
 
     private void loadFallbackBannerView(Activity activity, FrameLayout container) {
@@ -302,7 +314,27 @@ public class AdManager {
         }
     }
 
+    public void destroyBanner(Activity activity) {
+        if (activity == null) {
+            executeDestroyBanner();
+            return;
+        }
+        try {
+            if (activity.getMainLooper().getThread() == Thread.currentThread()) {
+                executeDestroyBanner();
+            } else {
+                activity.runOnUiThread(this::executeDestroyBanner);
+            }
+        } catch (Throwable t) {
+            executeDestroyBanner();
+        }
+    }
+
     public void destroyBanner() {
+        executeDestroyBanner();
+    }
+
+    private void executeDestroyBanner() {
         try {
             if (adView != null) {
                 if (adView.getParent() instanceof ViewGroup) {
